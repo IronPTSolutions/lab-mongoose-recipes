@@ -13,7 +13,7 @@ const recipeSchema = new mongoose.Schema({
         enum: LEVEL_TYPES
     },
     ingredients: [String],
-    cousine: {
+    cuisine: {
         type: String,
         required: true
     },
