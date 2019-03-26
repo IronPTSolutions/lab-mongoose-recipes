@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 const Recipe = require('./models/recipe.model');
-const mockRecipes = require('./data.js')
+const recipes = require('./data.js')
 
 require('./configs/db.config');
 
-// Iteration 2
 const recipe = {
   title: 'Beef and Pepper Stir Fry',
   level: 'Amateur Chef',
@@ -28,27 +27,33 @@ const recipe = {
 
 Recipe.create(recipe)
   .then((recipe) => {
-    console.info(recipe.title);
-    
-    return Recipe.insertMany(mockRecipes)
+    console.info('========== Iteration 2');
+    console.info('- Created recipe', recipe.title);
+    return Recipe.insertMany(recipes)
   })
   .then((recipes) => {
+    console.info('========== Iteration 3');
     for (let recipe of recipes) {
-      console.info(recipe.title);
+      console.info('- Created recipe', recipe.title);
     }
-    
     return Recipe.findOneAndUpdate({ title: 'Rigatoni alla Genovese' }, { $set: { duration: 100 } }, { new: true });
   })
   .then((recipe) => {
-    console.log(`${recipe.title} successfully updated!`);
-
+    console.info('========== Iteration 4');
+    console.info(`${recipe.title} successfully updated!`);
     return Recipe.findOneAndRemove({ title: 'Carrot Cake' });
   })
   .then((recipe) => {
-    console.log(`${recipe.title} successfully removed!`);
-
-    return mongoose.connection.close();
+    console.info('========== Iteration 5');
+    console.info(`${recipe.title} successfully removed!`);
   })
-  .catch(error => {
-    console.error(error);
-  });
+  .catch(error => console.error(error))
+  .then(() => {
+    console.info('========== Cleaning database...');
+    return mongoose.connection.dropDatabase();
+  })
+  .then(() => {
+    console.info('========== Closing database...');
+    return mongoose.connection.close()
+  })
+  .catch(error => console.error(error));

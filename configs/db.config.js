@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
-const DB_NAME = 'lab-mongoose-recipes';
-const MONGO_URI = `mongodb://localhost/${DB_NAME}`;
+const MONGODB_URI = 'mongodb://localhost:27017/lab-mongoose-recipes'
 
-mongoose.connect(MONGO_URI);
-mongoose.connection.on('connected', (error) => {
-    console.log('Connected to the database:', MONGO_URI);
-    mongoose.connection.db.dropDatabase();
-});
-mongoose.connection.on('error', (error) => {
-    console.log('Database connection error:', error);
-});
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
+    .then(() => console.info(`Successfully connected to the database: ${MONGODB_URI}`))
+    .catch(() => console.error(`An error ocurred trying to connect to the database: ${MONGODB_URI}`))
