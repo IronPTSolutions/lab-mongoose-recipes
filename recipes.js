@@ -4,7 +4,9 @@ const recipes = require('./data.js')
 
 require('./configs/db.config');
 
-const recipe = {
+
+
+  const recipe = {
   title: 'Beef and Pepper Stir Fry',
   level: 'Amateur Chef',
   ingredients: [
@@ -26,34 +28,32 @@ const recipe = {
 }
 
 Recipe.create(recipe)
-  .then((recipe) => {
-    console.info('========== Iteration 2');
-    console.info('- Created recipe', recipe.title);
-    return Recipe.insertMany(recipes)
+Recipe.create(data)
+  .then(() => {
+    return Recipe.updateOne({title:'Rigatoni alla Genovese'},{$set: {duration:100}},{ new: true })
+    .then(()=> console.info ('Succesful Update'))
+    .catch(() => console.error ('Update Fail'))
+    
   })
-  .then((recipes) => {
-    console.info('========== Iteration 3');
-    for (let recipe of recipes) {
-      console.info('- Created recipe', recipe.title);
-    }
-    return Recipe.findOneAndUpdate({ title: 'Rigatoni alla Genovese' }, { $set: { duration: 100 } }, { new: true });
+    .then(()=> {
+      return Recipe.deleteOne({ title: 'Carrot Cake' })
+    .then(()=>console.info(`successfully removed!`))
+   
   })
-  .then((recipe) => {
-    console.info('========== Iteration 4');
-    console.info(`${recipe.title} successfully updated!`);
-    return Recipe.findOneAndRemove({ title: 'Carrot Cake' });
-  })
-  .then((recipe) => {
-    console.info('========== Iteration 5');
-    console.info(`${recipe.title} successfully removed!`);
+
+  .then (() => {
+    console.info(`Created Recipe: ${recipe.title}`);
+      return data.forEach (recipe => {
+        console.info(`Created Recipe: ${recipe.title}`);
+      }) 
+
   })
   .catch(error => console.error(error))
   .then(() => {
-    console.info('========== Cleaning database...');
-    return mongoose.connection.dropDatabase();
+    console.info('Log Out');
+    return mongoose.disconnect();
   })
-  .then(() => {
-    console.info('========== Closing database...');
-    return mongoose.connection.close()
-  })
-  .catch(error => console.error(error));
+  .then(() => 
+    console.info('disconnect'))
+  
+

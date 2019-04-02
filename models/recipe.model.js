@@ -10,14 +10,23 @@ const recipeSchema = new mongoose.Schema({
     },
     level: {
         type: String,
-        enum: LEVEL_TYPES
+        enum :['Easy Peasy', 'Amateur Chef', 'UltraPro Chef'],
     },
-    ingredients: [String],
+    ingredients:{ 
+       type : Array,
+
+    },
+    
     cuisine: {
         type: String,
         required: true
     },
-    dishType: DISH_TYPES,
+
+    dishType: {
+        type: String,
+       emum: ['Breakfast', 'Dish', 'Snack', 'Drink', 'Dessert', 'Other']
+    }, 
+
     image: {
         type: String,
         default: 'https://images.media-allrecipes.com/images/75131.jpg'
@@ -26,7 +35,11 @@ const recipeSchema = new mongoose.Schema({
         type: Number,
         min: 0
     },
-    creator: String,
+    creator: {
+         type:String,
+
+    },
+    
     created: {
         type: Date,
         default: Date.now
